@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Webbteknik — Ordlista & Flashcards</title>
+  <link rel="stylesheet" href="web_tech_flashcards.css">
+</head>
+<body>
+  <header>
+    <h1>Webbteknik — Ordlista & Flashcards</h1>
+    <div class="small">41 termer — interaktiv</div>
+  </header>
+
+    <div class="controls">
+      <input id="search" class="search" placeholder="Sök term eller förklaring...">
+      <button id="clear" class="secondary">Rensa sökning</button>
+    </div>
+
+  <div class="container">
+    <section class="panel" id="listPanel">
+      <h2>Ordlista (klicka på ett kort för att visa förklaring)</h2>
+      <ul class="terms" id="termsList"></ul>
+    </section>
+
+    <!-- Flashcards removed: page now shows only terms and definitions -->
+  </div>
+
+  <footer>Skapad för utbildning — öppna filen i din webbläsare för att använda.</footer>
+
+  <script>
+    // Data: 41 webbtermer
+    const terms = [
+      {term:"HTML",def:"Struktur- och innehållsspråk för webbsidor (HyperText Markup Language)."},
+      {term:"CSS",def:"Språk för att styla utseende på webbsidor (Cascading Style Sheets)."},
+      {term:"JavaScript",def:"Skriptspråk för interaktivitet i webbläsaren."},
+      {term:"DOM",def:"Representation av dokumentet i webbläsaren (Document Object Model)."},
+      {term:"Element",def:"En enhet i HTML, t.ex. paragraf eller bild."},
+      {term:"Tagg",def:"Märkning som omger ett element, t.ex. <div>."},
+      {term:"Attribut",def:"Egenskaper på ett HTML-element, t.ex. src eller alt."},
+      {term:"Selektor",def:"CSS-regel som väljer element att styla."},
+      {term:"Klass",def:"HTML-attribut för att gruppera element (.class)."},
+      {term:"ID",def:"Unik identifierare för ett element (#id)."},
+      {term:"Boxmodell",def:"Hur elementens storlek bestäms: content, padding, border, margin."},
+      {term:"Margin",def:"Yttre avstånd runt ett element."},
+      {term:"Padding",def:"Inre avstånd mellan innehåll och kant."},
+      {term:"Border",def:"Kantlinje runt ett element."},
+      {term:"Display",def:"CSS-egenskap som bestämmer layoutbeteende (block, inline...)."},
+      {term:"Block",def:"Element som tar hela radens bredd (t.ex. <div>, <p>)."},
+      {term:"Inline",def:"Element som ligger i samma rad som texten (t.ex. <span>)."},
+      {term:"Flexbox",def:"Layoutsystem för en-dimensionella layouter."},
+      {term:"Grid",def:"Layoutsystem för två-dimensionella layouter (CSS Grid)."},
+      {term:"Responsiv design",def:"Anpassning av layout för olika skärmstorlekar."},
+      {term:"Viewport",def:"Den synliga delen av sidan i webbläsaren."},
+      {term:"Media query",def:"CSS-regel som tillämpar olika stilar beroende på skärmstorlek."},
+      {term:"Semantisk HTML",def:"Använda rätt HTML-element för rätt typ av innehåll."},
+      {term:"Tillgänglighet",def:"Göra webben användbar för alla, inklusive personer med funktionsnedsättningar."},
+      {term:"ARIA",def:"Attribut som förbättrar tillgänglighet för skärmläsare."},
+      {term:"Formulär",def:"HTML-formulär för användarinmatning."},
+      {term:"Input",def:"Fält för användarinmatning (text, checkbox, radio etc.)."},
+      {term:"Button",def:"Klickbar knapp för handlingar."},
+      {term:"Anchor",def:"Länk-element i HTML (<a>) som tar användaren till en annan sida."},
+      {term:"Href",def:"Attribut som anger länkens destination (adress)."},
+      {term:"index.html",def:"Vanlig startsida-fil för en webbplats."},
+      {term:"Server",def:"Dator som levererar webbsidor eller tjänster."},
+      {term:"Klient",def:"Webbläsaren eller enhet som begär och visar sidan."},
+      {term:"HTTP",def:"Protokoll för överföring av webbinformation (HyperText Transfer Protocol)."},
+      {term:"HTTPS",def:"Säker version av HTTP med kryptering."},
+      {term:"URL",def:"Adress till en resurs på webben (Uniform Resource Locator)."},
+      {term:"API",def:"Gränssnitt för att kommunicera mellan system (Application Programming Interface)."},
+      {term:"JSON",def:"Format för att skicka strukturerad data (JavaScript Object Notation)."},
+      {term:"AJAX",def:"Teknik för asynkrona webbförfrågningar utan omladdning."},
+      {term:"Ramverk",def:"Samling verktyg och bibliotek för snabbare utveckling (framework)."},
+      {term:"npm",def:"Paket- och beroendehanterare för JavaScript (Node Package Manager)."}
+    ];
+
+  // DOM refs
+  const termsList = document.getElementById('termsList');
+  const search = document.getElementById('search');
+  const clearBtn = document.getElementById('clear');
+
+  // State
+  let filtered = terms.slice();
+
+  function renderList(items){
+    termsList.innerHTML = '';
+    items.forEach((t,i)=>{
+      const li = document.createElement('li');
+      li.className = 'term';
+      li.innerHTML = `<div class="term-title">${escapeHtml(t.term)}</div><div class="term-def">${escapeHtml(t.def)}</div>`;
+      termsList.appendChild(li);
+    });
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function doSearch(){
+    const q = search.value.trim().toLowerCase();
+    if(!q){ filtered = terms.slice(); }
+    else {
+      filtered = terms.filter(t=> t.term.toLowerCase().includes(q) || t.def.toLowerCase().includes(q));
+    }
+    renderList(filtered);
+  }
+
+  // Event wiring
+  search.addEventListener('input', doSearch);
+  clearBtn.addEventListener('click', ()=>{ search.value=''; doSearch(); search.focus(); });
+
+  // Initial render
+  renderList(terms);
+  </script>
+</body>
+</html>
